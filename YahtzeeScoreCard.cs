@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using Yahtzee_Simulation.Models;
 namespace Yahtzee_Simulation;
 
 public record YahtzeeScoreCard
@@ -29,13 +30,30 @@ public record YahtzeeScoreCard
         }.ToImmutableDictionary();
     }
 
-        public bool IsBoxFree(string boxName) =>
-        Boxes.ContainsKey(boxName) && Boxes[boxName] == null;
+
+// Kontrollerar om rutan på scorekortet som hör till denna Yahtzee-kombination
+// fortfarande är tom och kan fyllas.
+
+// Vi skickar in själva YahzeeCup-objektet, inte en sträng.
+// Det gör att spellogiken styrs av kombinationen som hittades,
+// och inte av strängmatchning
+        public bool IsBoxFree(YahzeeCup combo)
+        {
+            var key = combo.GetType().Name;
+            return Boxes.ContainsKey(key) && Boxes[key] == null;
+        }
 
 
+// Fyller en ruta på scorekortet med poängen och returnerar
+// ett NYTT scorekort (immutability).
+
+
+// Denna metod räknar inte ut någon poäng och vet inget om tärningar.
+// Den ansvarar bara för regeln:
+//   "En ruta får bara fyllas en gång."
     public YahtzeeScoreCard FillBox(string boxName, int score)
     {
-        if (!IsBoxFree(boxName))
+        if (!Boxes.ContainsKey(boxName) || Boxes[boxName] != null)
             return this;
 
         var updatedBoxes = Boxes.SetItem(boxName, score);

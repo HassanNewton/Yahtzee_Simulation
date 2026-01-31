@@ -115,8 +115,8 @@ public IEnumerable<YahzeeCup> GetAllCombinationsSorted()
     // Filtrera bort de som inte är giltiga för detta kast
     var valid = possibleCombinations
         .Where(combo => IsValidCombination(combo))
-        .OrderByDescending(GetPriority)
-        .ThenByDescending(combo => combo.Score);
+        .OrderByDescending(combo => combo.Score);
+
 
 
     return valid;

@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/hassan/Documents/Newton/AdvancedProgramming/Yahtzee_Simulation/Yahtzee_Simulation.csproj",
+      "projectUniqueName": "/Users/hassan/Desktop/Yahtzee_Simulation/Yahtzee_Simulation.csproj",
       "projectName": "Yahtzee_Simulation",
-      "projectPath": "/Users/hassan/Documents/Newton/AdvancedProgramming/Yahtzee_Simulation/Yahtzee_Simulation.csproj",
+      "projectPath": "/Users/hassan/Desktop/Yahtzee_Simulation/Yahtzee_Simulation.csproj",
       "packagesPath": "/Users/hassan/.nuget/packages/",
-      "outputPath": "/Users/hassan/Documents/Newton/AdvancedProgramming/Yahtzee_Simulation/obj/",
+      "outputPath": "/Users/hassan/Desktop/Yahtzee_Simulation/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/hassan/.nuget/NuGet/NuGet.Config"

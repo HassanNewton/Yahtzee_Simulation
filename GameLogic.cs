@@ -32,9 +32,9 @@ public static class GameLogic
 
         // 4. Välj den bästa kombinationen som är ledig på scorecard
         var bestFree = combinations
-            .FirstOrDefault(c => scoreCard.IsBoxFree(c.GetType().Name));
+            .FirstOrDefault(c => scoreCard.IsBoxFree(c));
 
-        // Om inget fack är ledigt (ska i praktiken inte hända efter fixen)
+        // Om inget fack är ledigt (alla rutor är fyllda)
         if (bestFree == null)
             return state;
 

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Yahtzee_Simulation")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2129a765ac30c05ee23149ef67e15e232b496074")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+30394cd3b536af91cd3d709bc5659c790e854516")]
 [assembly: System.Reflection.AssemblyProductAttribute("Yahtzee_Simulation")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Yahtzee_Simulation")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
