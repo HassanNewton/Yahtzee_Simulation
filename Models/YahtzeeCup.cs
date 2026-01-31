@@ -127,7 +127,7 @@ private bool IsValidCombination(YahzeeCup combo)
     var test = combo with { dice = this.dice };
 
     // En kombination är bara giltig om den ger poäng
-    return test.Score > 0;
+    return true;
 }
 
 // Strategisk prioritet för Yahtzee-spel
