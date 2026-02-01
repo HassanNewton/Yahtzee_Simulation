@@ -46,7 +46,7 @@ public record YahzeeCup : CupOfDice
     public YahzeeCup GetYahtzeeCombination()
     {
         if (dice.Count() != 5)
-            return new NoCombination() {dice = this.dice};
+            return new NoCombination() { dice = this.dice };
 
         bool isOnes = sortedDicePips.Any(pip => pip == DiePip.One);
         bool isTwos = sortedDicePips.Any(pip => pip == DiePip.Two);
@@ -59,12 +59,12 @@ public record YahzeeCup : CupOfDice
         bool isThreeOfAKind = dicePipGroups.Any(g => g.Count() >= 3);
         bool isFourOfAKind = dicePipGroups.Any(group => group.Count() == 4);
         bool isFullHouse = dicePipGroups.Any(group => group.Count() == 3) && dicePipGroups.Any(group => group.Count() == 2);
-       
-        bool isSmallStraight =  straightsCombinations
+
+        bool isSmallStraight = straightsCombinations
             .Where(kvp => kvp.Key.StartsWith("SmallStraight"))
             .Any(kvp => kvp.Value.All(pip => sortedDicePips.Contains(pip)));
-       
-        bool isLargeStraight =  straightsCombinations
+
+        bool isLargeStraight = straightsCombinations
             .Where(kvp => kvp.Key.StartsWith("LargeStraight"))
             .Any(kvp => kvp.Value.All(pip => sortedDicePips.Contains(pip)));
 
@@ -73,29 +73,29 @@ public record YahzeeCup : CupOfDice
         return (isYahtzee, isLargeStraight, isSmallStraight, isFullHouse, isFourOfAKind, isThreeOfAKind,
              isSixes, isFives, isFours, isThrees, isTwos, isOnes) switch
         {
-            (true, _, _, _, _, _, _, _, _, _, _, _) => new Yahtzee() {dice = this.dice},
-            (_, true, _, _, _, _, _, _, _, _, _, _) => new LargeStraight () {dice = this.dice},
-            (_, _, true, _, _, _, _, _, _, _, _, _) => new SmallStraight() {dice = this.dice},
-            (_, _, _, true, _, _, _, _, _, _, _, _) => new FullHouse() {dice = this.dice},
-            (_, _, _, _, true, _, _, _, _, _, _, _) => new FourOfAKind() {dice = this.dice},
-            (_, _, _, _, _, true, _, _, _, _, _, _) => new ThreeOfAKind() {dice = this.dice},
-            (_, _, _, _, _, _, true, _, _, _, _, _) => new Sixes() {dice = this.dice},
-            (_, _, _, _, _, _, _, true, _, _, _, _) => new Fives() {dice = this.dice},
-            (_, _, _, _, _, _, _, _, true, _, _, _) => new Fours() {dice = this.dice},
-            (_, _, _, _, _, _, _, _, _, true, _, _) => new Threes() {dice = this.dice},
-            (_, _, _, _, _, _, _, _, _, _, true, _) => new Twos() {dice = this.dice},
-            (_, _, _, _, _, _, _, _, _, _, _, true) => new Ones() {dice = this.dice},
-            _ => new Chance() {dice = this.dice}
-        };  
+            (true, _, _, _, _, _, _, _, _, _, _, _) => new Yahtzee() { dice = this.dice },
+            (_, true, _, _, _, _, _, _, _, _, _, _) => new LargeStraight() { dice = this.dice },
+            (_, _, true, _, _, _, _, _, _, _, _, _) => new SmallStraight() { dice = this.dice },
+            (_, _, _, true, _, _, _, _, _, _, _, _) => new FullHouse() { dice = this.dice },
+            (_, _, _, _, true, _, _, _, _, _, _, _) => new FourOfAKind() { dice = this.dice },
+            (_, _, _, _, _, true, _, _, _, _, _, _) => new ThreeOfAKind() { dice = this.dice },
+            (_, _, _, _, _, _, true, _, _, _, _, _) => new Sixes() { dice = this.dice },
+            (_, _, _, _, _, _, _, true, _, _, _, _) => new Fives() { dice = this.dice },
+            (_, _, _, _, _, _, _, _, true, _, _, _) => new Fours() { dice = this.dice },
+            (_, _, _, _, _, _, _, _, _, true, _, _) => new Threes() { dice = this.dice },
+            (_, _, _, _, _, _, _, _, _, _, true, _) => new Twos() { dice = this.dice },
+            (_, _, _, _, _, _, _, _, _, _, _, true) => new Ones() { dice = this.dice },
+            _ => new Chance() { dice = this.dice }
+        };
     }
 
     // Returnerar ALLA möjliga kombinationer för detta kast,
-// sorterade efter högsta poäng först.
-// Detta används av RoundLogic för att välja bästa LEDIGA ruta.
-public IEnumerable<YahzeeCup> GetAllCombinationsSorted()
+    // sorterade efter högsta poäng först.
+    // Detta används av RoundLogic för att välja bästa LEDIGA ruta.
+    //Alla 13 rutor ska vara med om ej möjligt sätt poängen till 0
+   public IEnumerable<YahzeeCup> GetAllCombinationsSorted()
 {
-    // Skapa alla möjliga kombinationstyper som detta kast KAN vara
-    var possibleCombinations = new List<YahzeeCup>
+    var all = new List<YahzeeCup>
     {
         new Yahtzee() { dice = this.dice },
         new LargeStraight() { dice = this.dice },
@@ -112,23 +112,33 @@ public IEnumerable<YahzeeCup> GetAllCombinationsSorted()
         new Chance() { dice = this.dice }
     };
 
-    // Filtrera bort de som inte är giltiga för detta kast
-    var valid = possibleCombinations
-        .Where(combo => IsValidCombination(combo))
-        .OrderByDescending(combo => combo.Score);
-
-
-
-    return valid;
+    return all.OrderByDescending(c => GetRealScore(c));
 }
-private bool IsValidCombination(YahzeeCup combo)
-{
-    // Skapa samma kombination med våra tärningar
-    var test = combo with { dice = this.dice };
 
-    // En kombination är bara giltig om den ger poäng
-    return true;
-}
+    private int GetRealScore(YahzeeCup combo)
+    {
+        var actualType = this.GetYahtzeeCombination().GetType();
+        var comboType = combo.GetType();
+
+        var alwaysAllowed = new[]
+        {
+        typeof(Ones), typeof(Twos), typeof(Threes),
+        typeof(Fours), typeof(Fives), typeof(Sixes),
+        typeof(Chance)
+    };
+
+        return comboType == actualType || alwaysAllowed.Contains(comboType)
+            ? combo.Score
+            : 0;
+    }
+
+// private bool IsValidCombination(YahzeeCup combo)
+// {
+//     // Skapa samma kombination med våra tärningar
+//     var test = combo with { dice = this.dice };
+
+//     return test.Score > 0;
+// }
 
 // Strategisk prioritet för Yahtzee-spel
 private int GetPriority(YahzeeCup combo)
